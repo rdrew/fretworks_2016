@@ -3,9 +3,6 @@ var app, base, concat, directory, gulp, gutil, hostname, path, refresh, sass, ug
 
 var autoPrefixBrowserList = ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'];
 
-var bourbon = require("node-bourbon").includePaths;
-
-var neat = require("node-neat").includePaths;
 
 //load all of our dependencies
 //add more here if you want to include more libraries
@@ -100,7 +97,7 @@ gulp.task('styles', function() {
                 .pipe(sass({
                       errLogToConsole: true,
                       includePaths: [
-                          'app/styles/scss/', bourbon, neat
+                          'app/styles/scss/'
                       ]
                 }))
                 .pipe(autoprefixer({
