@@ -8,6 +8,7 @@
 
 //global things
 @import 'general/_reset';
+@import 'general/_base-tufte';
 @import 'layout/_main';
 
 //pages
@@ -15,15 +16,3 @@
 
 
 
-//test
-body {
-	font-family: $helvetica;
-	
-}
-@include media( 980px ) {
-
-	body {
-	//background: blue;
-	}
-
-}
