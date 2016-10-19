@@ -1,5 +1,5 @@
 //initialize all of our variables
-var app, base, concat, directory, gulp, gutil, hostname, path, refresh, sass, uglify, imagemin, minifyCSS, del, browserSync, autoprefixer, gulpSequence, shell, sourceMaps, plumber;
+var app, base, concat, directory, gulp, gutil, hostname, path, refresh, sass, uglify, imagemin, minifyCSS, del, browserSync, autoprefixer, gulpSequence, shell, sourceMaps, plumber, twig;
 
 var autoPrefixBrowserList = ['last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'];
 
@@ -19,6 +19,8 @@ autoprefixer = require('gulp-autoprefixer');
 gulpSequence = require('gulp-sequence').use(gulp);
 shell       = require('gulp-shell');
 plumber     = require('gulp-plumber');
+//rob added this
+twig = require('gulp-twig')
 
 gulp.task('browserSync', function() {
     browserSync({
@@ -48,6 +50,20 @@ gulp.task('images-deploy', function() {
         //prevent pipe breaking caused by errors from gulp plugins
         .pipe(plumber())
         .pipe(gulp.dest('dist/images'));
+});
+
+// Compile Twig templates to HTML
+gulp.task('templates', function() {
+    return gulp.src('app/templates/*.html') // run the Twig template parser on all .html files in the "templates dir" directory
+        .pipe(twig())
+        .pipe(gulp.dest('app')); // output the rendered HTML files to the "dist" directory
+});
+
+// Compile Twig templates to HTML for deployment
+gulp.task('templates-deploy', function() {
+    return gulp.src('app/templates/*.html') // run the Twig template parser on all .html files in the "templates dir" directory
+        .pipe(twig())
+        .pipe(gulp.dest('dist')); // output the rendered HTML files to the "dist" directory
 });
 
 //compiling our Javascripts
@@ -199,11 +215,12 @@ gulp.task('scaffold', function() {
 //  startup the web server,
 //  start up browserSync
 //  compress all scripts and SCSS files
-gulp.task('default', ['browserSync', 'scripts', 'styles'], function() {
+gulp.task('default', ['browserSync', 'scripts', 'styles', 'templates'], function() {
     //a list of watchers, so it will watch all of the following files waiting for changes
     gulp.watch('app/scripts/src/**', ['scripts']);
     gulp.watch('app/styles/scss/**', ['styles']);
     gulp.watch('app/images/**', ['images']);
+    gulp.watch('app/templates/*.html', ['templates']);
     gulp.watch('app/*.html', ['html']);
 });
 
